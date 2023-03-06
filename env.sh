@@ -1,0 +1,9 @@
+export POSTGRES_USER="postgres"
+export POSTGRES_PASSWORD="P@ssw0rd!"
+export DJANGO_DB_USER="db_user"
+export DJANGO_DB_NAME="django_db"
+export DJANGO_DB_PASSWORD="p@ssword"
+export DJANGO_DB_PORT=5432
+export DJANGO_ADMIN_USER="django_user"
+export DJANGO_ADMIN_MAIL="admin@test.com"
+export DJANGO_ADMIN_PASSWORD="django_user"

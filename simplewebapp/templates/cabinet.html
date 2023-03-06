@@ -1,0 +1,235 @@
+<html lang="en">
+  <!doctype html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="cabinet.css"> -->
+    <style>
+      .main {
+        display: flex;
+        width: 100%;
+        background-color: brown;
+        justify-content: space-evenly;
+        flex-direction: row;
+        min-height: 100%;
+      }
+
+      .left {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 2;
+        background-color: antiquewhite;
+        min-height: 100%;
+        align-items: center;
+        align-content: center;
+        justify-content: space-around;
+      }
+
+      .right {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 5;
+        background-color: aquamarine;
+        min-height: 100%;
+        padding: 50px;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        border-radius: 20px;
+        /* align-items: center;
+        align-content: center; */
+      }
+
+      .fieldWrapper {
+        display: flex;
+        padding: 20px;
+        /* width: 50; */
+        flex-direction: column;
+        /* align-items: center; */
+        /* align-content: center; */
+        background-color: azure;
+      }
+      .send-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        background-color: brown;
+        border-radius: 200px;
+        flex-grow: 10;
+        height: 20px;
+        color: white;
+        flex-direction: row;
+        padding: 20px 10px;
+        margin: 10px;
+        cursor: pointer;
+      }
+      .send-btn-space {
+        display: flex;
+        flex-grow: 2;
+        flex-direction: row;
+        height: 25px;
+
+      }
+      .btn-wrapper {
+        display: flex;
+        flex-direction: row;
+      }
+      .dest {
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+      }
+    </style>
+    <title>Scanner</title>
+    </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Scanner</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <!-- <a class="nav-link active" aria-current="page" href="#">Home</a> -->
+            </li>
+          </ul>
+
+          <ul class="navbar-nav me-right mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/logout/">Log Out</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <div class="main">
+      <div class="left">
+        <div>
+          <form>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="dest">
+              <div class="fieldWrapper">
+                  {{ form.network.errors }}
+                  <label for="{{ form.network.id_for_label }}">Network:</label>
+                  {{ form.network }}
+              </div>
+              ------ or ------
+              <div class="fieldWrapper">
+                {{ form.host.errors }}
+                <label for="{{ form.host.id_for_label }}">Host:</label>
+                {{ form.host }}
+              </div>
+            </div>
+            <div class="fieldWrapper">
+              {{ form.port.errors }}
+              <label for="{{ form.port.id_for_label }}">Port or port range: </label>
+              {{ form.port }}
+            </div>
+            <div class="fieldWrapper">
+                {{ form.scan_type.errors }}
+                <label for="{{ form.scan_type.id_for_label }}">Scan Type: </label>
+                {{ form.scan_type }}
+            </div>
+            <div class="btn-wrapper">
+              <div class="send-btn-space"></div>
+              <div class="send-btn">Send</div>
+              <div class="send-btn-space"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="right">
+
+      </div>
+    </div>
+
+    <script>
+      async function create_scan(e) {
+
+        const network = document.querySelector('input[name="network"]').value;
+        const host = document.querySelector('input[name="host"]').value;
+        const port = document.querySelector('input[name="port"]').value;
+        const scan_type = document.querySelector('input[name="scan_type"]:checked').value;
+
+        const csrf = document.querySelector('[name=csrfmiddlewaretoken]').value
+
+        body = JSON.stringify({
+          "network": encodeURIComponent(network),
+          "host": encodeURIComponent(host),
+          "port": port,
+          "scan_type": scan_type
+        })
+
+        console.log(body)
+        headers = {
+            "X-Requested-With": "XMLHttpRequest",
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrf
+        }
+
+        fetch('/scanner/scan/', {
+          method: 'POST',
+          headers: headers,
+          body: body
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          if (data['status'] == 200) {
+            get_scan_updates(data["scan_id"])
+          }
+        });
+      }
+      async function get_scan_updates(scan_id) {
+        let cont = true
+        let right = document.querySelector('.right');
+        const pre = document.createElement("pre");
+        right.innerHTML = '';
+        right.append(pre);
+        while(cont) {
+          await new Promise(r => setTimeout(r, 2000));
+          headers = {
+            "X-Requested-With": "XMLHttpRequest",
+            'Content-Type': 'application/json',
+          }
+          let url_params = new URLSearchParams({
+            'scan_id': scan_id
+          })
+
+          fetch('/scanner/get_scan?' + url_params, {
+            method: 'GET',
+            headers: headers
+          })
+          .then(response => response.json())
+          .then(data => {
+            pre.textContent = data['data'];
+            if (data['data'].endsWith("-------- FINISHED --------")) {
+              cont = false;
+            }
+          });
+        }
+      }
+      let send_btn = document.querySelector(".send-btn");
+      send_btn.addEventListener("click", e => create_scan(e));
+
+    </script>
+
+  </body>
+</html>
