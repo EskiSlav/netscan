@@ -5,8 +5,8 @@ import logging
 
 from django.http import HttpRequest
 from django.http import JsonResponse
-from django.shortcuts import render
 from scanner.scanner import Scanner
+# from django.shortcuts import render
 # Create your views here.
 logger = logging.getLogger(__name__)
 

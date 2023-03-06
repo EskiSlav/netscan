@@ -5,10 +5,13 @@ import logging
 import os
 import urllib.parse
 from random import randint
-from typing import List
 
-from scapy.all import *
-
+from scapy.all import IP
+from scapy.all import sr1
+from scapy.all import TCP
+from scapy.all import Thread
+# from typing import List
+# from scapy.all import *
 # Initialize the nmap object
 logger = logging.getLogger(__name__)
 
@@ -55,7 +58,7 @@ class Scanner:
             )
             return -1
 
-        if not dnetwork is None and not dhost is None and not dnetwork == '' and not dhost == '':
+        if dnetwork is not None and dhost is not None and not dnetwork == '' and not dhost == '':
             logger.warning(
                 f'Both dnetwork and dhost were provided. {dnetwork=} {dhost=}',
             )
@@ -76,11 +79,11 @@ class Scanner:
         }
         logger.debug(f'{params=}')
 
-        if not dhost is None and not dport is None:
+        if dhost is not None and dport is not None:
             t = Thread(target=scan_func, kwargs=params)
             t.start()
 
-        elif not dnetwork is None and not dport is None:
+        elif dnetwork is not None and dport is not None:
             t = Thread(target=scan_func, kwargs=params)
             t.start()
 
@@ -105,7 +108,7 @@ class Scanner:
 
         def _syn_host_scan(dhost=None, dport=None):
             # Create a SYN packet
-            packet = IP(dst=dhost)/TCP(dport=dport, flags='S')
+            packet = IP(dst=dhost) / TCP(dport=dport, flags='S')
             # Send the packet and receive the response
             logger.debug(f'{packet=}')
             response = sr1(packet, timeout=10, verbose=0)

@@ -14,10 +14,10 @@ class TestUrls(SimpleTestCase):
         url = resolve(reverse('index'))
         self.assertEqual(url.func, index)
 
-    def test_index_url_is_resolved(self):
+    def test_login_url_is_resolved(self):
         url = resolve(reverse('login'))
         self.assertEqual(url.func, login_view)
 
-    def test_index_url_is_resolved(self):
+    def test_logout_url_is_resolved(self):
         url = resolve(reverse('logout'))
         self.assertEqual(url.func, logout_view)
