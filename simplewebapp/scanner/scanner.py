@@ -4,7 +4,7 @@ import ipaddress
 import logging
 import os
 import urllib.parse
-from random import randint
+from datetime import datetime
 
 from scapy.all import IP
 from scapy.all import sr1
@@ -75,7 +75,7 @@ class Scanner:
             'dhost': dhost,
             'dport': dport,
             'scan_type': scan_type,
-            'scan_id': randint(1000, 10000),
+            'scan_id': datetime.now().strftime('%d%m%Y_%H_%M_%S_%f'),
         }
         logger.debug(f'{params=}')
 
@@ -128,7 +128,7 @@ class Scanner:
             out.flush()
 
         if dnetwork is not None:
-            net = ipaddress.ip_network(dnetwork)
+            net = [str(ip) for ip in ipaddress.ip_network(dnetwork)]
         elif dhost is not None:
             net = [ipaddress.ip_address(dhost)]
 
