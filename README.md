@@ -49,5 +49,5 @@ After a few seconds you can access the server at `http://localhost:8081/login`.
 ## Development
 
 If you eager to develop some new features, it is useful to stick to some rules:
-1. Use [pre-commit](https://pre-commit.com) hooks defined in `pre-commit-hooks.yaml`. Install it in your .git dir or run manually before every commit.
+1. Use [pre-commit](https://pre-commit.com) hooks defined in `pre-commit-config.yaml`. Install it in your .git dir or run manually before every commit.
 2. Project contains env.sh file that is handy to set env variables so that it is easy to run web server via `python manage.py runserver`
