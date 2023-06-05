@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from django import forms
 
-CHOICES = [('1', 'SYN'), ('2', 'TCP'), ('3', 'UDP')]
+CHOICES = [('1', 'SYN'), ('2', 'TCP'), ('3', 'UDP'), ('4', 'ICMP/ping')]
 
 
 class ScanForm(forms.Form):
